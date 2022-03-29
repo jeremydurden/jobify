@@ -8,13 +8,12 @@ const initialState = {
   email: "",
   password: "",
   isMember: true,
-  showAlert: false,
 };
 
 const Register = () => {
   const [values, setValues] = useState(initialState);
 
-  const { isLoading, showAlert } = useAppContext;
+  const { isLoading, showAlert } = useAppContext();
 
   const toggleMember = () => {
     setValues({ ...values, isMember: !values.isMember });
