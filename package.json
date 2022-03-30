@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "express": "^4.17.3",
     "normalize.css": "^8.0.1"
   },
   "name": "jobify",
@@ -7,9 +8,11 @@
   "version": "1.0.0",
   "main": "index.js",
   "type": "module",
-  "devDependencies": {},
+  "devDependencies": {
+    "nodemon": "^2.0.15"
+  },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "nodemon server"
   },
   "keywords": [],
   "author": "",
