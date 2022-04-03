@@ -10,6 +10,7 @@ const register = async (req, res) => {
     //manually throwing a custom Error if any of these values are missing from the req.body
     throw new BadRequestError("please provide all values");
   }
+  //checking the user document to see if a user w/ this email already exists and then throwing a Bad request error if that is true
   const userAlreadyExists = await User.findOne({ email });
   if (userAlreadyExists) {
     throw new BadRequestError("Email already in use");

@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 import validator from "validator";
+import bcryptjs from "bcryptjs";
 
 const UserSchema = new mongoose.Schema({
   name: {
@@ -36,6 +37,12 @@ const UserSchema = new mongoose.Schema({
     maxlength: 20,
     default: "my city",
   },
+});
+
+// mongoose 'pre' save hook — gets called before creating/saving a User which allows us to hash the password before sending it to the database
+UserSchema.pre("save", async function () {
+  const salt = await bcryptjs.genSalt(10);
+  this.password = await bcryptjs.hash(this.password, salt);
 });
 
 export default mongoose.model("User", UserSchema);
