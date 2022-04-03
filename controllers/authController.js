@@ -1,20 +1,14 @@
-import User from "../models/User.js";
 import { StatusCodes } from "http-status-codes";
 
-//extending from Error class to add a cust statusCode property that can be used for a logic check in the errorHandlerMiddlerware function
-class CustomAPIError extends Error {
-  constructor(message) {
-    super(message);
-    this.statusCode = StatusCodes.BAD_REQUEST;
-  }
-}
+import User from "../models/User.js";
+import { NotFoundError, BadRequestError } from "../errors/index.js";
 
 const register = async (req, res) => {
   const { name, email, password } = req.body;
 
   if (!name || !email || !password) {
     //manually throwing a custom Error if any of these values are missing from the req.body
-    throw new CustomAPIError("please provide all values");
+    throw new BadRequestError("please provide all values");
   }
 
   const user = await User.create({ name, email, password });
