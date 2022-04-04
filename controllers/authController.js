@@ -17,9 +17,18 @@ const register = async (req, res) => {
   }
   const user = await User.create({ name, email, password });
   // uses the jsonwebtoken package that was imported into the User model to create a web token assigned to the user based on their _id
-  // and then adds the token to the res.status object response to communicate between the server and client
+  // and then adds the token to the res.status object response to communicate between the server and clientu
   const token = user.createJWT();
-  res.status(StatusCodes.CREATED).json({ user, token });
+  res.status(StatusCodes.CREATED).json({
+    user: {
+      name: user.name,
+      lastName: user.lastName,
+      email: user.email,
+      location: user.location,
+    },
+    token,
+    location: user.location,
+  });
 };
 const login = async (req, res) => {
   res.send("login-user");
