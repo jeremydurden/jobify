@@ -16,7 +16,10 @@ const register = async (req, res) => {
     throw new BadRequestError("Email already in use");
   }
   const user = await User.create({ name, email, password });
-  res.status(StatusCodes.CREATED).json({ user });
+  // uses the jsonwebtoken package that was imported into the User model to create a web token assigned to the user based on their _id
+  // and then adds the token to the res.status object response to communicate between the server and client
+  const token = user.createJWT();
+  res.status(StatusCodes.CREATED).json({ user, token });
 };
 const login = async (req, res) => {
   res.send("login-user");
