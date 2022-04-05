@@ -16,10 +16,13 @@
   "main": "index.js",
   "type": "module",
   "devDependencies": {
+    "concurrently": "^7.1.0",
     "nodemon": "^2.0.15"
   },
   "scripts": {
-    "start": "nodemon server"
+    "server": "nodemon server --ignore client",
+    "client": "npm start --prefix client",
+    "start": "concurrently --kill-others-on-fail \"npm run server\" \" npm run client\""
   },
   "keywords": [],
   "author": "",
