@@ -50,7 +50,7 @@ const login = async (req, res) => {
     throw new UnAuthenticatedError("Invalid Credentials");
   }
   const token = user.createJWT();
-  // this way the password doesn't get sent back to the client along with the token and other data, but we don't need to hard-code the user data manually
+  // this way the password doesn't get sent back to the client  in the response along with the token and other data, but we don't need to hard-code the user data manually
   user.password = undefined;
   res.status(StatusCodes.OK).json({ user, token, location: user.location });
 };
