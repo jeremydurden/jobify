@@ -1,4 +1,4 @@
-import { Landing, Dashboard, Register, Error } from "./pages";
+import { Landing, ProtectedRoute, Register, Error } from "./pages";
 
 import {
   AddJob,
@@ -15,7 +15,14 @@ function App() {
     <div>
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<SharedLayout />}>
+          <Route
+            path="/"
+            element={
+              <ProtectedRoute>
+                <SharedLayout />
+              </ProtectedRoute>
+            }
+          >
             <Route index element={<Stats />} />
             <Route path="all-jobs" element={<AllJobs />} />
             <Route path="add-job" element={<AddJob />} />
