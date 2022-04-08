@@ -12,7 +12,7 @@ const Navbar = () => {
     setShowLogout(!showLogout);
   };
 
-  const { user, toggleSidebar } = useAppContext();
+  const { user, logoutUser, toggleSidebar } = useAppContext();
   return (
     <Wrapper>
       <div className="nav-center">
@@ -28,15 +28,11 @@ const Navbar = () => {
         <div className="btn-container">
           <button type="button" className="btn" onClick={toggleShowLogout}>
             <FaUserCircle />
-            {user.name}
+            {user && user.name}
             <FaCaretDown />
           </button>
           <div className={showLogout ? "dropdown show-dropdown" : "dropdown"}>
-            <button
-              type="button"
-              onClick={() => console.log("logout user")}
-              className="dropdown-btn"
-            >
+            <button type="button" onClick={logoutUser} className="dropdown-btn">
               logout
             </button>
           </div>
