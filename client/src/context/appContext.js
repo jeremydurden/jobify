@@ -7,6 +7,7 @@ import {
   SETUP_USER_BEGIN,
   SETUP_USER_SUCCESS,
   SETUP_USER_ERROR,
+  TOGGLE_SIDEBAR,
 } from "./actions";
 
 const token = localStorage.getItem("token");
@@ -22,6 +23,7 @@ export const initialState = {
   token: token,
   userLocation: userLocation || "",
   jobLocation: userLocation || "",
+  showSidebar: false,
 };
 const AppContext = React.createContext();
 const AppProvider = ({ children }) => {
@@ -48,6 +50,10 @@ const AppProvider = ({ children }) => {
     localStorage.removeItem("token");
     localStorage.removeItem("user");
     localStorage.removeItem("location");
+  };
+
+  const toggleSidebar = () => {
+    dispatch({ type: TOGGLE_SIDEBAR });
   };
 
   const setupUser = async ({ currentUser, endPoint, alertText }) => {
@@ -83,6 +89,7 @@ const AppProvider = ({ children }) => {
         ...state,
         displayAlert,
         setupUser,
+        toggleSidebar,
       }}
     >
       {children}
