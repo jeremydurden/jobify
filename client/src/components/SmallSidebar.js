@@ -4,6 +4,7 @@ import links from "../utils/links";
 import { FaTimes } from "react-icons/fa";
 import Logo from "./Logo";
 import Wrapper from "../assets/wrappers/SmallSidebar";
+import NavLinks from "./NavLinks";
 
 export const SmallSidebar = () => {
   const { showSidebar, toggleSidebar } = useAppContext();
@@ -21,7 +22,9 @@ export const SmallSidebar = () => {
           <header>
             <Logo />
           </header>
-          <div className="nav-links">nav links</div>
+          <div className="nav-links">
+            <NavLinks toggleSidebar={toggleSidebar} />
+          </div>
         </div>
       </div>
     </Wrapper>
