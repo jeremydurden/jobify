@@ -1,12 +1,10 @@
 import { useAppContext } from "../context/appContext";
-import { NavLink } from "react-router-dom";
-import links from "../utils/links";
 import { FaTimes } from "react-icons/fa";
 import Logo from "./Logo";
 import Wrapper from "../assets/wrappers/SmallSidebar";
 import NavLinks from "./NavLinks";
 
-export const SmallSidebar = () => {
+const SmallSidebar = () => {
   const { showSidebar, toggleSidebar } = useAppContext();
   return (
     <Wrapper>
