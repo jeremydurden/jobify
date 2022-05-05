@@ -1,11 +1,7 @@
 import { StatusCodes } from "http-status-codes";
 
 import User from "../models/User.js";
-import {
-  NotFoundError,
-  BadRequestError,
-  UnAuthenticatedError,
-} from "../errors/index.js";
+import { BadRequestError, UnAuthenticatedError } from "../errors/index.js";
 
 const register = async (req, res) => {
   const { name, email, password } = req.body;
@@ -55,6 +51,23 @@ const login = async (req, res) => {
   res.status(StatusCodes.OK).json({ user, token, location: user.location });
 };
 const updateUser = async (req, res) => {
-  res.send("updateUser-user");
+  // destructure the properties from req.body
+  const { email, name, lastName, location } = req.body;
+  //check to make sure that all properties exist on the body and if not throw new error
+  if (!email || !name || !lastName || !location) {
+    throw new BadRequestError("Please provide all values");
+  }
+  //find the user who's id matches the id on req.user, which is being set on the auth.js middleware
+  const user = await User.findOne({ _id: req.user.userId });
+  //now update the values on the user object w/ the matching values from the request body
+  user.email = email;
+  user.name = name;
+  user.lastName = lastName;
+  user.location = location;
+
+  await user.save();
+  const token = user.createJWT();
+  //sends back the user object with updated values minus the password
+  res.status(StatusCodes.OK).json({ user, token, location: user.location });
 };
 export { register, login, updateUser };
