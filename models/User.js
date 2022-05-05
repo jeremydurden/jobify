@@ -44,8 +44,13 @@ const UserSchema = new mongoose.Schema({
 
 // mongoose 'pre' save hook — gets called before creating/saving a User which allows us to hash the password before sending it to the database
 UserSchema.pre("save", async function () {
-  // const salt = await bcryptjs.genSalt(10);
-  // this.password = await bcryptjs.hash(this.password, salt);
+  //this first line checks to see if the password property on the user has been modified -- if it hasn't then it just returns -- isModified is a mongoose function
+  //this allows us to modify other property of the user object and then .save(), triggering the .pre hook, but not leading to an
+  //error when the passord is not included, or potentially hashed again after already being hashed.
+  if (!this.isModified("password")) return;
+  //if the password property was modified (or created) then it will hash it
+  const salt = await bcryptjs.genSalt(10);
+  this.password = await bcryptjs.hash(this.password, salt);
 });
 
 //Custom instance method on the Model — has access to the document w/ 'this' keyword

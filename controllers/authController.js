@@ -36,7 +36,7 @@ const login = async (req, res) => {
     throw new BadRequestError("Please provide all values");
   }
   // .select('+password') overrides the "select: false" property on the password object on the UserSchema.  select: false was necessary becuase w/ User.create on the login function
-  // we were getting the password when we didn't need it, so "select: false" essentially makes it invisible
+  // we were getting the password when we didn't need it, so "select: false" means that it won't be returned w/ queries
   const user = await User.findOne({ email }).select("+password");
   if (!user) {
     throw new UnAuthenticatedError("Invalid Credentials");
@@ -64,10 +64,11 @@ const updateUser = async (req, res) => {
   user.name = name;
   user.lastName = lastName;
   user.location = location;
-
+  //calling user.save will trigger the .pre function on UserSchema in the User.js model.
   await user.save();
   const token = user.createJWT();
-  //sends back the user object with updated values minus the password
+  //sends back the user object with updated values minus the password -- the current setup needs to change, because that function is looking for a password on the user
+  //object in order to hash it w/ bcrypt
   res.status(StatusCodes.OK).json({ user, token, location: user.location });
 };
 export { register, login, updateUser };
