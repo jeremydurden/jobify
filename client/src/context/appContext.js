@@ -32,6 +32,14 @@ const AppContext = React.createContext();
 const AppProvider = ({ children }) => {
   const [state, dispatch] = useReducer(reducer, initialState);
 
+  //axios -- setting up a custom axios fetch that has our baseURL and headers already added so we don't need to type it out everytime we need to fetch
+  const authFetch = axios.create({
+    baseURL: "/api/v1",
+    headers: {
+      Authorization: `Bearer ${state.token}`,
+    },
+  });
+
   const displayAlert = () => {
     dispatch({ type: DISPLAY_ALERT });
     clearAlert();
@@ -92,7 +100,13 @@ const AppProvider = ({ children }) => {
   };
 
   const updateUser = async (currentUser) => {
-    console.log(currentUser);
+    try {
+      // calls the endpoint on the server, matches the route, user the currentUser as the data payload, and sets the Bearer token based on the global setting for Axios up top
+      const { data } = await authFetch.patch("/auth/updateUser", currentUser);
+      console.log("data", data);
+    } catch (error) {
+      console.log(error.response);
+    }
   };
 
   return (
