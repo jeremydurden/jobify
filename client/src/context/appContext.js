@@ -32,7 +32,7 @@ const AppContext = React.createContext();
 const AppProvider = ({ children }) => {
   const [state, dispatch] = useReducer(reducer, initialState);
 
-  //axios -- setting up a custom axios fetch that has our baseURL and headers already added so we don't need to type it out everytime we need to fetch
+  //axios -- setting up a custom axios instance that will fetch our baseURL with the headers already added so we don't need to type it out everytime we need to fetch
   const authFetch = axios.create({
     baseURL: "/api/v1",
     headers: {
@@ -101,7 +101,9 @@ const AppProvider = ({ children }) => {
 
   const updateUser = async (currentUser) => {
     try {
-      // calls the endpoint on the server, matches the route, user the currentUser as the data payload, and sets the Bearer token based on the global setting for Axios up top
+      // calls the endpoint on the server (baseURL is already added to the authFetch instance),
+      // it then matches the route, uses the currentUser as the data payload, and sets the Bearer token based on the setting for the axios instance, authFetch up top
+      // this allows you to make other requests using just axios w/out sending the headers (auth: bearer token) along w/ the request when it isn't needed
       const { data } = await authFetch.patch("/auth/updateUser", currentUser);
       console.log("data", data);
     } catch (error) {
