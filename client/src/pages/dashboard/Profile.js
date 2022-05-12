@@ -4,7 +4,7 @@ import { useAppContext } from "../../context/appContext";
 import Wrapper from "../../assets/wrappers/DashboardFormPage";
 
 const Profile = () => {
-  //destructuring form the useAppContext
+  //destructuring from the useAppContext
   const { user, showAlert, displayAlert, updateUser, isLoading } =
     useAppContext();
 
@@ -16,11 +16,11 @@ const Profile = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    //remove while testing
-    // if (!name || !email || !lastName || !location) {
-    //   displayAlert();
-    //   return;
-    // }
+    //comment out while testing
+    if (!name || !email || !lastName || !location) {
+      displayAlert();
+      return;
+    }
     updateUser({ name, email, lastName, location });
   };
 
