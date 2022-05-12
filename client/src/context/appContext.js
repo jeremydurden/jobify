@@ -9,7 +9,11 @@ import {
   SETUP_USER_ERROR,
   TOGGLE_SIDEBAR,
   LOGOUT_USER,
+  UPDATE_USER_BEGIN,
+  UPDATE_USER_SUCCESS,
+  UPDATE_USER_ERROR,
 } from "./actions";
+import { response } from "express";
 
 const token = localStorage.getItem("token");
 const user = localStorage.getItem("user");
@@ -54,6 +58,7 @@ const AppProvider = ({ children }) => {
     },
     (error) => {
       // console.log(error.response)
+      //checking for Authorization on the response and logging the user out if we get a 401 error
       if (error.response.status === 401) {
         logoutUser();
       }
@@ -121,15 +126,28 @@ const AppProvider = ({ children }) => {
   };
 
   const updateUser = async (currentUser) => {
+    dispatch({ type: UPDATE_USER_BEGIN });
     try {
       // calls the endpoint on the server (baseURL is already added to the authFetch instance),
       // it then matches the route, uses the currentUser as the data payload, and sets the Bearer token based on the setting for the axios instance, authFetch up top
       // this allows you to make other requests using just axios w/out sending the headers (auth: bearer token) along w/ the request when it isn't needed
       const { data } = await authFetch.patch("/auth/updateUser", currentUser);
-      console.log("data", data);
+      const { user, location, token } = data;
+      dispatch({
+        type: UPDATE_USER_SUCCESS,
+        payload: { user, location, token },
+      });
+      addUserToLocalStorage({ user, location, token });
     } catch (error) {
-      console.log(error.response);
+      //this payload is coming from axios
+      if (error.response.status !== 401) {
+        dispatch({
+          type: UPDATE_USER_ERROR,
+          payload: { msg: error.response.data.msg },
+        });
+      }
     }
+    clearAlert();
   };
 
   return (
