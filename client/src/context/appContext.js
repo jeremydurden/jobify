@@ -13,7 +13,6 @@ import {
   UPDATE_USER_SUCCESS,
   UPDATE_USER_ERROR,
 } from "./actions";
-import { response } from "express";
 
 const token = localStorage.getItem("token");
 const user = localStorage.getItem("user");
@@ -139,13 +138,13 @@ const AppProvider = ({ children }) => {
       });
       addUserToLocalStorage({ user, location, token });
     } catch (error) {
-      //this payload is coming from axios
       if (error.response.status !== 401) {
-        dispatch({
-          type: UPDATE_USER_ERROR,
-          payload: { msg: error.response.data.msg },
-        });
       }
+      dispatch({
+        type: UPDATE_USER_ERROR,
+        //this payload is coming from axios
+        payload: { msg: error.response.data.msg },
+      });
     }
     clearAlert();
   };

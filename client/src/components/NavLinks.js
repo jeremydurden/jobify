@@ -1,7 +1,7 @@
 import { NavLink } from "react-router-dom";
 import links from "../utils/links";
 
-const NavLinks = ({ toggleSidebar }) => {
+const NavLinks = () => {
   return (
     <div className="nav-links">
       {links.map((link) => {
@@ -11,7 +11,6 @@ const NavLinks = ({ toggleSidebar }) => {
           <NavLink
             to={path}
             key={id}
-            onClick={toggleSidebar}
             className={({ isActive }) =>
               isActive ? "nav-link active" : "nav-link"
             }
