@@ -103,9 +103,10 @@ const reducer = (state, action) => {
     };
   }
   if (action.type === HANDLE_CHANGE) {
+    const { name, value } = action.payload;
     return {
       ...state,
-      [action.payload.name]: action.payload.value,
+      [name]: value,
     };
   }
   throw new Error(`No such action: ${action.type}`);
