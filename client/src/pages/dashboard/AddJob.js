@@ -1,7 +1,6 @@
 import { FormRow, FormRowSelect, Alert } from "../../components";
 import { useAppContext } from "../../context/appContext";
 import Wrapper from "../../assets/wrappers/DashboardFormPage";
-import { useState } from "react";
 
 function AddJob() {
   const {
@@ -15,11 +14,12 @@ function AddJob() {
     status,
     statusOptions,
     isEditing,
+    handleChange,
   } = useAppContext();
 
   const handleJobInput = (e) => {
     const { name, value } = e.target;
-    console.log(`${name}: ${value}`);
+    handleChange({ name, value });
   };
 
   const handleSubmit = (e) => {
@@ -28,6 +28,7 @@ function AddJob() {
       displayAlert();
       return;
     }
+    console.log("job created");
   };
 
   return (
