@@ -12,6 +12,7 @@ import {
   UPDATE_USER_SUCCESS,
   UPDATE_USER_ERROR,
   HANDLE_CHANGE,
+  CLEAR_VALUES,
 } from "./actions";
 
 const reducer = (state, action) => {
@@ -107,6 +108,21 @@ const reducer = (state, action) => {
     return {
       ...state,
       [name]: value,
+    };
+  }
+  if (action.type === CLEAR_VALUES) {
+    const initialState = {
+      isEditing: false,
+      editJobId: "",
+      position: "",
+      company: "",
+      jobLocation: state.userLocation || "",
+      jobType: "full-time",
+      staus: "pending",
+    };
+    return {
+      ...state,
+      ...initialState,
     };
   }
   throw new Error(`No such action: ${action.type}`);
