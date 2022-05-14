@@ -60,6 +60,25 @@ function AddJob() {
             handleChange={handleJobInput}
           />
           {/* JOB TYPE */}
+          <div className="form-row">
+            <label htmlFor="jobType" className="form-label">
+              job type
+            </label>
+            <select
+              name="jobType"
+              value={jobTpye}
+              onChange={handleJobInput}
+              className="form-select"
+            >
+              {jobTypeOptions.map((itemValue, index) => {
+                return (
+                  <option key={index} value={itemValue}>
+                    {itemValue}
+                  </option>
+                );
+              })}
+            </select>
+          </div>
           {/* JOB STATUS */}
           <div className="btn-container">
             <button
