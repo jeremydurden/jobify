@@ -63,6 +63,7 @@ const AppProvider = ({ children }) => {
   //request
   authFetch.interceptors.request.use(
     (config) => {
+      //these are the authorization headers w/ the Bearer token coming from JWT
       config.headers.common["Authorization"] = `Bearer ${state.token}`;
       return config;
     },
@@ -230,6 +231,7 @@ const AppProvider = ({ children }) => {
     dispatch({ type: DELETE_JOB_BEGIN });
     try {
       await authFetch.delete(`/jobs/${jobId}`);
+      //calling getJobs again after deleting the job to refresh the front-end so that it matches the updated database
       getJobs();
     } catch (error) {
       console.log(error.response);
