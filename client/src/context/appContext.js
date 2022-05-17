@@ -21,6 +21,9 @@ import {
   GET_JOBS_SUCCESS,
   SET_EDIT_JOB,
   DELETE_JOB_BEGIN,
+  EDIT_JOB_BEGIN,
+  EDIT_JOB_SUCCESS,
+  EDIT_JOB_ERROR,
 } from "./actions";
 
 const token = localStorage.getItem("token");
@@ -223,9 +226,32 @@ const AppProvider = ({ children }) => {
     dispatch({ type: SET_EDIT_JOB, payload: { id } });
   };
 
-  //placeholder
-  const editJob = () => {
-    console.log("edit job");
+  const editJob = async () => {
+    dispatch({ type: EDIT_JOB_BEGIN });
+    try {
+      //destruct
+      const { position, company, jobLocation, jobType, status } = state;
+      //patch request to the custom axios instance -- uses edit job id from state that gets set when setEditJob() is called w/ the edit button on the Job components
+      await authFetch.patch(`/jobs/${state.editJobId}`, {
+        //sets key:value because of matching names ie company:company
+        company,
+        position,
+        jobLocation,
+        jobType,
+        status,
+      });
+      dispatch({ type: EDIT_JOB_SUCCESS });
+      //clear out the form fields or revert them back to their defaults after submitting a successful edit
+      dispatch({ type: CLEAR_VALUES });
+    } catch (error) {
+      //401 causes automatic logout
+      if (error.response === 401) return;
+      dispatch({
+        type: EDIT_JOB_ERROR,
+        payload: { msg: error.response.data.msg },
+      });
+    }
+    clearAlert();
   };
   const deleteJob = async (jobId) => {
     dispatch({ type: DELETE_JOB_BEGIN });
