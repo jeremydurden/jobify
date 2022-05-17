@@ -240,6 +240,7 @@ const AppProvider = ({ children }) => {
         jobType,
         status,
       });
+      //setting up success alert
       dispatch({ type: EDIT_JOB_SUCCESS });
       //clear out the form fields or revert them back to their defaults after submitting a successful edit
       dispatch({ type: CLEAR_VALUES });
