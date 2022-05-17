@@ -2,6 +2,7 @@ import Job from "../models/Job.js";
 import { StatusCodes } from "http-status-codes";
 import { BadRequestError, NotFoundError } from "../errors/index.js";
 import checkPermission from "../utils/checkPermissions.js";
+import mongoose from "mongoose";
 
 const createJob = async (req, res) => {
   const { position, company } = req.body;
@@ -53,7 +54,21 @@ const updateJob = async (req, res) => {
   res.status(StatusCodes.OK).json({ updatedJob });
 };
 const showStats = async (req, res) => {
-  res.send("showStats");
+  //aggregate pipeline, pass in the array of steps, each step is represented as an object
+  //FIRST STEP is $match and then we're looking for all jobs createdBy the current user
+  //we have access to the userId on the request because of the auth.js middleware, but it is a string,
+  //so we use the mongoose.Types from the Jobs model w/ the string as the argument
+  //this first step just returns the entire jobs document for the current user
+
+  //SECOND STEP
+  //next we use the $group operator - it looks at everything returned from the match and checks for the property status on those objects
+  //when it finds a new value for status, it creates an object with two properties: _id:statusValue and count:X where X is the total number times that value is present
+  //in the initial matched object
+  let stats = await Job.aggregate([
+    { $match: { createdBy: mongoose.Types.ObjectId(req.user.userId) } },
+    { $group: { _id: "$status", count: { $sum: 1 } } },
+  ]);
+  res.status(StatusCodes.OK).json({ stats });
 };
 
 export { createJob, deleteJob, getAllJobs, updateJob, showStats };
