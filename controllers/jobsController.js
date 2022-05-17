@@ -1,6 +1,7 @@
 import Job from "../models/Job.js";
 import { StatusCodes } from "http-status-codes";
 import { BadRequestError, NotFoundError } from "../errors/index.js";
+import checkPermission from "../utils/checkPermissions.js";
 
 const createJob = async (req, res) => {
   const { position, company } = req.body;
@@ -34,7 +35,8 @@ const updateJob = async (req, res) => {
   if (!job) {
     throw new NotFoundError(`No job with id:${jobId}`);
   }
-  //eventually check permissions
+  checkPermission(req.user, job.createdBy);
+  //find job and update where the _id property on the job matches the jobId from req.params and then update pased on the values in req.body
   const updatedJob = await Job.findByIdAndUpdate({ _id: jobId }, req.body, {
     new: true,
     //checks to make sure value isn't null or that it doesn't match a required value
