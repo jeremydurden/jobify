@@ -1,7 +1,7 @@
 import { UnAuthenticatedError } from "../errors/index.js";
 
 const checkPermission = (requestUser, resourceUserId) => {
-  if (requestUser === resourceUserId.toString()) return;
+  if (requestUser.userId === resourceUserId.toString()) return;
 
   throw new UnAuthenticatedError("Not authorized to access this route");
 };
