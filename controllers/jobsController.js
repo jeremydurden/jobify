@@ -68,6 +68,13 @@ const showStats = async (req, res) => {
     { $match: { createdBy: mongoose.Types.ObjectId(req.user.userId) } },
     { $group: { _id: "$status", count: { $sum: 1 } } },
   ]);
+  stats = stats.reduce((acc, curr) => {
+    //destructuring _id and count from curr and giving _id an alias of title
+    const { _id: title, count } = curr;
+    //stats now equals an object w/ properties equal to the _id or title and for each title we set the value to the count
+    acc[title] = count;
+    return acc;
+  }, {});
   res.status(StatusCodes.OK).json({ stats });
 };
 
